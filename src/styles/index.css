@@ -1,0 +1,81 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #222;
+  background: white;
+}
+
+main {
+  max-width: 720px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+section {
+  margin-top: 32px;
+}
+
+label {
+  display: block;
+  margin: 12px 0 6px;
+}
+
+input, select, textarea, button {
+  font: inherit;
+}
+
+input:not([type="radio"]):not([type="checkbox"]), select, textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 360px;
+  padding: 8px;
+  margin-bottom: 12px;
+}
+
+input[type="radio"] {
+  margin-right: 8px;
+}
+
+button {
+  padding: 6px 10px;
+  margin: 0 8px 8px 0;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.profile-row {
+  margin-bottom: 12px;
+}
+
+.profile-picture {
+  display: block;
+  width: 160px;
+  height: 160px;
+  margin: 16px 0;
+}
+
+a {
+  display: inline-block;
+  margin: 0 16px 16px 0;
+}
+
+.note {
+  color: #555;
+  font-size: 14px;
+  line-height: 1.5;
+}
