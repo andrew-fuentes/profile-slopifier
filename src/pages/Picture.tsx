@@ -1,7 +1,15 @@
 import { useState } from "react";
-import { avatarUrl } from "../utils/avatar.js";
+import { avatarUrl } from "../utils/avatar";
 
-export default function Picture({ draft, onSave, onBack }) {
+import type { Profile, ProfileDraft } from "../types";
+
+interface PictureProps {
+  draft: ProfileDraft;
+  onSave: (profile: Profile) => void;
+  onBack: () => void;
+}
+
+export default function Picture({ draft, onSave, onBack }: PictureProps) {
   const [picture, setPicture] = useState("");
   const [variant, setVariant] = useState(0);
   const [selected, setSelected] = useState(false);

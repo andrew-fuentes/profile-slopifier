@@ -1,18 +1,19 @@
 import { useState } from "react";
-import Home from "./pages/Home.jsx";
-import Profiles from "./pages/Profiles.jsx";
-import ProfileDetail from "./pages/ProfileDetail.jsx";
-import Picture from "./pages/Picture.jsx";
-import Login from "./pages/Login.jsx";
+import type { Page, Profile, ProfileDraft } from "./types";
+import Home from "./pages/Home";
+import Profiles from "./pages/Profiles";
+import ProfileDetail from "./pages/ProfileDetail";
+import Picture from "./pages/Picture";
+import Login from "./pages/Login";
 
 export default function App() {
-  const [page, setPage] = useState("login");
-  const [profiles, setProfiles] = useState([]);
-  const [selectedId, setSelectedId] = useState(null);
-  const [draft, setDraft] = useState(null);
+  const [page, setPage] = useState<Page>("login");
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [draft, setDraft] = useState<ProfileDraft | null>(null);
   const selectedProfile = profiles.find((profile) => profile.id === selectedId);
 
-  function saveProfile(profile) {
+  function saveProfile(profile: Profile) {
     // TODO: Send the selected picture to the server and save its URL on the
     // confirmed username's database record before updating the local profile list.
     setProfiles([...profiles, profile]);
@@ -20,12 +21,12 @@ export default function App() {
     setPage("profiles");
   }
 
-  function openProfile(id) {
+  function openProfile(id: string) {
     setSelectedId(id);
     setPage("detail");
   }
 
-  function updateProfile(updatedProfile) {
+  function updateProfile(updatedProfile: Profile) {
     setProfiles(
       profiles.map((profile) =>
         profile.id === updatedProfile.id ? updatedProfile : profile,

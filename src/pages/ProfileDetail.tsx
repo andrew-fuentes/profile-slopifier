@@ -1,10 +1,19 @@
 import { useState } from "react";
-import { avatarUrl, downloadProfile } from "../utils/avatar.js";
+import { avatarUrl, downloadProfile } from "../utils/avatar";
 
-export default function ProfileDetail({ profile, onUpdate, onBack }) {
+import type { FormEvent } from "react";
+import type { Profile } from "../types";
+
+interface ProfileDetailProps {
+  profile: Profile;
+  onUpdate: (profile: Profile) => void;
+  onBack: () => void;
+}
+
+export default function ProfileDetail({ profile, onUpdate, onBack }: ProfileDetailProps) {
   const [comments, setComments] = useState(profile.comments);
 
-  function reroll(event) {
+  function reroll(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     // Demo only: comments are saved, and the placeholder color changes.
     onUpdate({

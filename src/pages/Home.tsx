@@ -1,12 +1,20 @@
 import { useState } from "react";
 
-export default function Home({ draft, onConfirm }) {
+import type { FormEvent } from "react";
+import type { ProfileDraft } from "../types";
+
+interface HomeProps {
+  draft: ProfileDraft | null;
+  onConfirm: (profile: ProfileDraft) => void;
+}
+
+export default function Home({ draft, onConfirm }: HomeProps) {
   const [firstName, setFirstName] = useState(draft?.firstName || "");
   const [candidates, setCandidates] = useState(draft?.candidates || []);
   const [username, setUsername] = useState(draft?.username || "");
   const [service, setService] = useState(draft?.service || "");
 
-  function findCandidates(event) {
+  function findCandidates(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const name = firstName.trim().toLowerCase().replace(/\s+/g, "");
     if (!name) return;

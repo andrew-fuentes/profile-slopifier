@@ -1,5 +1,7 @@
+import type { Profile } from "../types";
+
 // Local placeholder until the image API is connected.
-export function avatarUrl(username, variant = 0) {
+export function avatarUrl(username: string, variant = 0): string {
   const colors = ['#dddddd', '#bdd7ee', '#c6e0b4', '#ffe699'];
   const color = colors[variant % colors.length];
   const initial = username.charAt(0).toUpperCase().replace(/[<>&"']/g, '');
@@ -7,7 +9,7 @@ export function avatarUrl(username, variant = 0) {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
-export function downloadProfile(profile) {
+export function downloadProfile(profile: Profile): void {
   const file = new Blob([JSON.stringify(profile, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(file);
   const link = document.createElement('a');

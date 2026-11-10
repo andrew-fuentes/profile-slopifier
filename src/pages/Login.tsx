@@ -1,5 +1,11 @@
-export default function Login({ onLogin }) {
-  function handleSubmit(event) {
+import type { FormEvent } from "react";
+
+interface LoginProps {
+  onLogin: () => void;
+}
+
+export default function Login({ onLogin }: LoginProps) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     onLogin();
   }

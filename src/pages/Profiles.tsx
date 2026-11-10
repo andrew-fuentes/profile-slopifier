@@ -1,6 +1,13 @@
-import { downloadProfile } from "../utils/avatar.js";
+import { downloadProfile } from "../utils/avatar";
 
-export default function Profiles({ profiles, onOpen }) {
+import type { Profile } from "../types";
+
+interface ProfilesProps {
+  profiles: Profile[];
+  onOpen: (id: string) => void;
+}
+
+export default function Profiles({ profiles, onOpen }: ProfilesProps) {
   return (
     <section>
       <h2>Saved profiles</h2>
