@@ -66,7 +66,10 @@ export default function ProfileDetail({ api, profile, busy, onBusyChange, onUpda
       <p>Name: {profile.firstName}</p>
       <p>Username: {profile.username}</p>
       {profile.picture && (
-        <img className="profile-picture" src={profile.picture} alt={`${profile.username} profile picture`} />
+        <>
+          <img className="profile-picture" src={profile.picture} alt={`${profile.username} profile picture`} />
+          <p className="note">Image storage is not permanent, please back them up on your own device.</p>
+        </>
       )}
       {error && <p role="alert">{error}</p>}
       {busy && <p role="status">Updating profile…</p>}

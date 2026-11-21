@@ -68,6 +68,7 @@ export default function Picture({ api, draft, onSave, onBack }: PictureProps) {
             src={preview.picture}
             alt="Profile picture preview"
           />
+          <p className="note">Image storage is not permanent, please back them up on your own device.</p>
           <label>
             <input
               type="checkbox"
