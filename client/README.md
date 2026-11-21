@@ -20,6 +20,10 @@ A React application built with Vite and TypeScript.
 
 ## Development
 
+Run `npm run dev` from `server` in a separate terminal. The Vite dev server
+forwards `/api` requests to `http://127.0.0.1:3000`. In production, route
+`/api` on the frontend origin to the Express backend.
+
 ```sh
 npm install
 npm run dev

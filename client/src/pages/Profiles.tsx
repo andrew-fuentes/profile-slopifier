@@ -4,14 +4,24 @@ import type { Profile } from "../types";
 
 interface ProfilesProps {
   profiles: Profile[];
+  loading: boolean;
+  error: string;
+  onRetry: () => void;
   onOpen: (id: string) => void;
 }
 
-export default function Profiles({ profiles, onOpen }: ProfilesProps) {
+export default function Profiles({ profiles, loading, error, onRetry, onOpen }: ProfilesProps) {
   return (
     <section>
       <h2>Saved profiles</h2>
-      {profiles.length === 0 && (
+      {loading && <p role="status">Loading profiles…</p>}
+      {error && (
+        <div>
+          <p role="alert">{error}</p>
+          <button onClick={onRetry}>Retry</button>
+        </div>
+      )}
+      {!loading && !error && profiles.length === 0 && (
         <p>No profiles yet. Create one to get started.</p>
       )}
       <ul>

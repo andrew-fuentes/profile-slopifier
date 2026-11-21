@@ -1,27 +1,40 @@
 import { useState } from "react";
+import { errorMessage } from "../api";
+import type { ProfileApi } from "../api";
 
 import type { FormEvent } from "react";
 import type { ProfileDraft } from "../types";
 
 interface HomeProps {
+  api: ProfileApi;
   draft: ProfileDraft | null;
   onConfirm: (profile: ProfileDraft) => void;
 }
 
-export default function Home({ draft, onConfirm }: HomeProps) {
+export default function Home({ api, draft, onConfirm }: HomeProps) {
   const [firstName, setFirstName] = useState(draft?.firstName || "");
   const [candidates, setCandidates] = useState(draft?.candidates || []);
   const [username, setUsername] = useState(draft?.username || "");
   const [service, setService] = useState(draft?.service || "");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  function findCandidates(event: FormEvent<HTMLFormElement>) {
+  async function findCandidates(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const name = firstName.trim().toLowerCase().replace(/\s+/g, "");
+    const name = firstName.trim();
     if (!name) return;
 
-    // Replace these demo names with a server response later.
-    setCandidates([`${name}123`, `${name}_online`, `hello_${name}`]);
+    setLoading(true);
+    setError("");
+    setCandidates([]);
     setUsername("");
+    try {
+      setCandidates(await api.findUsernames(name));
+    } catch (cause) {
+      setError(errorMessage(cause));
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -36,15 +49,20 @@ export default function Home({ draft, onConfirm }: HomeProps) {
             setFirstName(event.target.value);
             setCandidates([]);
             setUsername("");
+            setError("");
           }}
           required
+          disabled={loading}
           maxLength={40}
         />
-        <button type="submit">Find usernames</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Finding usernames…" : "Find usernames"}
+        </button>
       </form>
+      {error && <p role="alert">{error}</p>}
 
       <h3>Username candidates</h3>
-      {candidates.length === 0 && (
+      {!loading && !error && candidates.length === 0 && (
         <p>Enter your first name to see candidates.</p>
       )}
       <ul>
@@ -67,6 +85,7 @@ export default function Home({ draft, onConfirm }: HomeProps) {
       <input
         id="service"
         type="text"
+        maxLength={200}
         value={service}
         onChange={(event) => setService(event.target.value)}
         placeholder="e.g. Instagram or example.com"
