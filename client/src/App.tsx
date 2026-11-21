@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import type { Auth, User } from "firebase/auth";
+import { auth } from "./firebase";
 import type { Page, Profile, ProfileDraft } from "./types";
 import Home from "./pages/Home";
 import Profiles from "./pages/Profiles";
@@ -7,7 +10,32 @@ import Picture from "./pages/Picture";
 import Login from "./pages/Login";
 
 export default function App() {
-  const [page, setPage] = useState<Page>("login");
+  const [user, setUser] = useState<User | null | undefined>(undefined);
+
+  useEffect(() => {
+    if (auth) return onAuthStateChanged(auth, setUser);
+  }, []);
+
+  return (
+    <main>
+      <h1>Profile Generator</h1>
+      {!auth ? (
+        <p role="alert">Set up Firebase in client/.env.local to enable login.</p>
+      ) : user === undefined ? (
+        <p role="status">Checking sign-in…</p>
+      ) : user ? (
+        <ProfileWorkspace key={user.uid} auth={auth} />
+      ) : (
+        <Login auth={auth} />
+      )}
+    </main>
+  );
+}
+
+function ProfileWorkspace({ auth }: { auth: Auth }) {
+  const [page, setPage] = useState<Page>("profiles");
+  const [signingOut, setSigningOut] = useState(false);
+  const [signOutError, setSignOutError] = useState(false);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [draft, setDraft] = useState<ProfileDraft | null>(null);
@@ -34,10 +62,20 @@ export default function App() {
     );
   }
 
+  async function handleSignOut() {
+    setSigningOut(true);
+    setSignOutError(false);
+    try {
+      await signOut(auth);
+    } catch {
+      setSignOutError(true);
+      setSigningOut(false);
+    }
+  }
+
   return (
-    <main>
-      <h1>Profile Generator</h1>
-      {page !== "login" && <nav aria-label="Main navigation">
+    <>
+      <nav aria-label="Main navigation">
         <button onClick={() => setPage("create")} disabled={page === "create"}>
           Create profile
         </button>
@@ -47,9 +85,11 @@ export default function App() {
         >
           Saved profiles
         </button>
-      </nav>}
-
-      {page === "login" && <Login onLogin={() => setPage("profiles")} />}
+        <button onClick={handleSignOut} disabled={signingOut}>
+          Sign out
+        </button>
+      </nav>
+      {signOutError && <p role="alert">Could not sign out. Try again.</p>}
 
       {page === "create" && (
         <Home
@@ -80,6 +120,6 @@ export default function App() {
           onBack={() => setPage("profiles")}
         />
       )}
-    </main>
+    </>
   );
 }

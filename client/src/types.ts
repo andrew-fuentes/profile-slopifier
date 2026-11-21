@@ -12,4 +12,4 @@ export interface Profile extends Omit<ProfileDraft, 'candidates'> {
   comments: string;
 }
 
-export type Page = 'login' | 'create' | 'picture' | 'profiles' | 'detail';
+export type Page = 'create' | 'picture' | 'profiles' | 'detail';
